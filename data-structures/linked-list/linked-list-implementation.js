@@ -11,23 +11,26 @@
 //   },
 // };
 
+class Node {
+  constructor(value, next = null) {
+    this.value = value;
+    this.next = next;
+  }
+
+  setNext(value) {
+    this.next = value;
+  }
+}
+
 class LinkedList {
   constructor(value) {
-    this.head = {
-      value,
-      next: null,
-    };
-
+    this.head = new Node(value);
     this.tail = this.head;
     this.length = 1; // optional
   }
 
   append(value) {
-    const newNode = {
-      value,
-      next: null,
-    };
-
+    const newNode = new Node(value, null);
     this.tail.next = newNode;
     this.tail = newNode;
     this.length++;
@@ -35,11 +38,7 @@ class LinkedList {
   }
 
   prepend(value) {
-    const newNode = {
-      value,
-      next: this.head,
-    };
-
+    const newNode = new Node(value, this.head);
     this.head = newNode;
     this.length--;
     return this;
@@ -47,11 +46,7 @@ class LinkedList {
 }
 
 const myLinkedList = new LinkedList(10);
-// console.log(myLinkedList);
-
 myLinkedList.append(5);
-// console.log(myLinkedList);
-
 myLinkedList.append(16);
 myLinkedList.prepend(12);
 console.log(JSON.stringify(myLinkedList.head, null, 2));
