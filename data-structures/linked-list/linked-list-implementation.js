@@ -55,7 +55,6 @@ class LinkedList {
   }
 
   insert(index, value) {
-    console.log({ index, length: this.length });
     if (index >= this.length) {
       // should throw error
       return this.prepend(value);
@@ -71,9 +70,28 @@ class LinkedList {
     return this;
   }
 
+  remove(index) {
+    const modifiedIndex = Math.min(Math.max(index, 0), this.length - 1);
+
+    if (modifiedIndex === 0) {
+      this.head = this.head.next;
+    } else if (modifiedIndex === this.length - 1) {
+      this.tail = this.traverseToIndex(modifiedIndex - 1);
+      this.tail.next = null;
+    } else {
+      const leader = this.traverseToIndex(modifiedIndex - 1);
+      const target = leader.next;
+      leader.next = target.next;
+    }
+
+    this.length--;
+    return this;
+  }
+
   traverseToIndex(index) {
     let node = this.head;
     for (let i = 0; i < index; i++) {
+      if (node.next === null) break;
       node = node.next;
     }
     return node;
@@ -89,6 +107,13 @@ console.log(myLinkedList.getArray());
 myLinkedList.insert(2, 99);
 console.log(myLinkedList.getArray());
 myLinkedList.insert(-5, 80);
+console.log(myLinkedList.getArray());
+
+myLinkedList.remove(-1);
+console.log(myLinkedList.getArray());
+myLinkedList.remove(10);
+console.log(myLinkedList.getArray());
+myLinkedList.remove(2);
 console.log(myLinkedList.getArray());
 
 console.log('tail', JSON.stringify(myLinkedList.tail, null, 2));
