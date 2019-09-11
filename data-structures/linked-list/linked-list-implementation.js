@@ -28,20 +28,21 @@ class LinkedList {
       next: null,
     };
 
-    if (this.head.next === null) {
-      this.head.next = newNode;
-      this.tail = newNode;
-    } else {
-      let node = this.head;
-      while (true) {
-        if (node.next === null) {
-          node.next = newNode;
-          this.tail = newNode;
-          break;
-        }
-        node = node.next;
-      }
-    }
+    this.tail.next = newNode;
+    this.tail = newNode;
+    this.length++;
+    return this;
+  }
+
+  prepend(value) {
+    const newNode = {
+      value,
+      next: this.head,
+    };
+
+    this.head = newNode;
+    this.length--;
+    return this;
   }
 }
 
@@ -52,7 +53,6 @@ myLinkedList.append(5);
 // console.log(myLinkedList);
 
 myLinkedList.append(16);
-myLinkedList.append(12);
-myLinkedList.append(11);
-console.log(myLinkedList);
+myLinkedList.prepend(12);
 console.log(JSON.stringify(myLinkedList.head, null, 2));
+console.log(JSON.stringify(myLinkedList.tail, null, 2));
