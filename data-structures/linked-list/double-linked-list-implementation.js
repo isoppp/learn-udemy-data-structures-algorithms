@@ -120,6 +120,33 @@ class DoubleLinkedList {
       ? this.getNodeByIndexFromHead(index)
       : this.getNodeByIndexFromTail(index);
   }
+
+  reverse() {
+    if (!this.head.next) return this;
+
+    let first = this.head;
+    let second = first.next;
+
+    while (second) {
+      const temp = second.next;
+      second.next = first;
+      second.prev = temp;
+      first = second;
+      second = temp;
+    }
+
+    const oldHead = this.head;
+    const oldHeadsNext = this.head.next;
+
+    this.head.next = null;
+    this.head = first;
+
+    this.tail.prev = null;
+    this.tail = oldHead;
+    this.tail.prev = oldHeadsNext;
+
+    return this;
+  }
 }
 
 const myLinkedList = new DoubleLinkedList(10);
@@ -129,7 +156,11 @@ myLinkedList.prepend(12);
 myLinkedList.insert(2, 99);
 myLinkedList.insert(-5, 80);
 myLinkedList.remove(-1);
-myLinkedList.remove(10);
-myLinkedList.remove(2);
+// myLinkedList.remove(10);
+// myLinkedList.remove(2);
 console.dir(myLinkedList, { depth: null });
 console.log(myLinkedList.getArray());
+
+myLinkedList.reverse();
+console.log(myLinkedList.getArray());
+console.dir(myLinkedList, { depth: null });
