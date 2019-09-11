@@ -57,14 +57,14 @@ class LinkedList {
   insert(index, value) {
     if (index >= this.length) {
       // should throw error
-      return this.prepend(value);
+      return this.append(value);
     } else if (index <= 0) {
       // should throw error
       return this.prepend(value);
     }
 
-    const reader = this.traverseToIndex(index - 1);
-    reader.next = new Node(value, reader.next);
+    const prevTarget = this.traverseToIndex(index - 1);
+    prevTarget.next = new Node(value, prevTarget.next);
 
     this.length++;
     return this;
@@ -79,9 +79,9 @@ class LinkedList {
       this.tail = this.traverseToIndex(modifiedIndex - 1);
       this.tail.next = null;
     } else {
-      const leader = this.traverseToIndex(modifiedIndex - 1);
-      const target = leader.next;
-      leader.next = target.next;
+      const prevTarget = this.traverseToIndex(modifiedIndex - 1);
+      const target = prevTarget.next;
+      prevTarget.next = target.next;
     }
 
     this.length--;
@@ -113,7 +113,7 @@ myLinkedList.remove(-1);
 console.log(myLinkedList.getArray());
 myLinkedList.remove(10);
 console.log(myLinkedList.getArray());
-myLinkedList.remove(2);
+myLinkedList.remove(3);
 console.log(myLinkedList.getArray());
 
 console.log('tail', JSON.stringify(myLinkedList.tail, null, 2));

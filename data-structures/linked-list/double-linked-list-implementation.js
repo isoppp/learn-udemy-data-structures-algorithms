@@ -12,17 +12,14 @@
 // };
 
 class Node {
-  constructor(value, next = null) {
+  constructor(value, next = null, prev = null) {
     this.value = value;
     this.next = next;
-  }
-
-  setNext(value) {
-    this.next = value;
+    this.prev = prev;
   }
 }
 
-class LinkedList {
+class DoubleLinkedList {
   constructor(value) {
     this.head = new Node(value);
     this.tail = this.head;
@@ -41,30 +38,36 @@ class LinkedList {
   }
 
   append(value) {
-    const newNode = new Node(value, null);
+    const newNode = new Node(value, null, this.tail);
     this.tail.next = newNode;
     this.tail = newNode;
+
     this.length++;
     return this;
   }
 
   prepend(value) {
-    this.head = new Node(value, this.head);
+    const newNode = new Node(value, this.head, null);
+    this.head.prev = newNode;
+    this.head = newNode;
     this.length++;
     return this;
   }
 
   insert(index, value) {
-    if (index >= this.length) {
+    if (index >= this.length - 1) {
       // should throw error
-      return this.prepend(value);
+      return this.append(value);
     } else if (index <= 0) {
       // should throw error
       return this.prepend(value);
     }
 
-    const reader = this.traverseToIndex(index - 1);
-    reader.next = new Node(value, reader.next);
+    const prevTarget = this.getNodeByIndex(index - 1);
+    const nextTarget = prevTarget.next;
+    const newNode = new Node(value, nextTarget, prevTarget);
+    nextTarget.prev = newNode;
+    prevTarget.next = newNode;
 
     this.length++;
     return this;
@@ -74,21 +77,24 @@ class LinkedList {
     const modifiedIndex = Math.min(Math.max(index, 0), this.length - 1);
 
     if (modifiedIndex === 0) {
+      this.head.next.prev = null;
       this.head = this.head.next;
     } else if (modifiedIndex === this.length - 1) {
-      this.tail = this.traverseToIndex(modifiedIndex - 1);
+      this.tail = this.getNodeByIndex(modifiedIndex - 1);
       this.tail.next = null;
     } else {
-      const leader = this.traverseToIndex(modifiedIndex - 1);
-      const target = leader.next;
-      leader.next = target.next;
+      const prevTarget = this.getNodeByIndex(modifiedIndex - 1);
+      const nextTarget = prevTarget.next;
+      const target = prevTarget.next;
+      nextTarget.prev = prevTarget;
+      prevTarget.next = nextTarget;
     }
 
     this.length--;
     return this;
   }
 
-  traverseToIndex(index) {
+  getNodeByIndexFromHead(index) {
     let node = this.head;
     for (let i = 0; i < index; i++) {
       if (node.next === null) break;
@@ -96,24 +102,34 @@ class LinkedList {
     }
     return node;
   }
+  getNodeByIndexFromTail(index) {
+    let node = this.tail;
+    for (let i = this.length - 1; i >= index; i--) {
+      if (node.prev === null) break;
+      node = node.prev;
+    }
+    return node;
+  }
+
+  getNodeByIndex(index) {
+    if (index === 0) return this.head;
+    if (index === this.length - 1) return this.tail;
+
+    const shouldSearchFromHead = index <= Math.floor(this.length / 2);
+    return shouldSearchFromHead
+      ? this.getNodeByIndexFromHead(index)
+      : this.getNodeByIndexFromTail(index);
+  }
 }
 
-const myLinkedList = new LinkedList(10);
+const myLinkedList = new DoubleLinkedList(10);
 myLinkedList.append(5);
 myLinkedList.append(16);
 myLinkedList.prepend(12);
-console.log(myLinkedList.getArray());
-
 myLinkedList.insert(2, 99);
-console.log(myLinkedList.getArray());
 myLinkedList.insert(-5, 80);
-console.log(myLinkedList.getArray());
-
 myLinkedList.remove(-1);
-console.log(myLinkedList.getArray());
 myLinkedList.remove(10);
-console.log(myLinkedList.getArray());
 myLinkedList.remove(2);
+console.dir(myLinkedList, { depth: null });
 console.log(myLinkedList.getArray());
-
-console.log('tail', JSON.stringify(myLinkedList.tail, null, 2));
