@@ -29,6 +29,17 @@ class LinkedList {
     this.length = 1; // optional
   }
 
+  getArray() {
+    const result = [];
+    let node = this.head;
+    while (node !== null) {
+      result.push(node.value);
+      node = node.next;
+    }
+
+    return result;
+  }
+
   append(value) {
     const newNode = new Node(value, null);
     this.tail.next = newNode;
@@ -38,10 +49,34 @@ class LinkedList {
   }
 
   prepend(value) {
-    const newNode = new Node(value, this.head);
-    this.head = newNode;
-    this.length--;
+    this.head = new Node(value, this.head);
+    this.length++;
     return this;
+  }
+
+  insert(index, value) {
+    console.log({ index, length: this.length });
+    if (index >= this.length) {
+      // should throw error
+      return this.prepend(value);
+    } else if (index <= 0) {
+      // should throw error
+      return this.prepend(value);
+    }
+
+    const reader = this.traverseToIndex(index - 1);
+    reader.next = new Node(value, reader.next);
+
+    this.length++;
+    return this;
+  }
+
+  traverseToIndex(index) {
+    let node = this.head;
+    for (let i = 0; i < index; i++) {
+      node = node.next;
+    }
+    return node;
   }
 }
 
@@ -49,5 +84,11 @@ const myLinkedList = new LinkedList(10);
 myLinkedList.append(5);
 myLinkedList.append(16);
 myLinkedList.prepend(12);
-console.log(JSON.stringify(myLinkedList.head, null, 2));
-console.log(JSON.stringify(myLinkedList.tail, null, 2));
+console.log(myLinkedList.getArray());
+
+myLinkedList.insert(2, 99);
+console.log(myLinkedList.getArray());
+myLinkedList.insert(-5, 80);
+console.log(myLinkedList.getArray());
+
+console.log('tail', JSON.stringify(myLinkedList.tail, null, 2));
