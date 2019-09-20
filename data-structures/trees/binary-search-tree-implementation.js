@@ -52,6 +52,23 @@ class BinarySearchTree {
   remove(value) {
     // TODO implementation
   }
+
+  breadthFirstSearch() {
+    // TODO BFS lecture 194
+  }
+  breadthFirstSearchR() {
+    // TODO BFS lecture using recursive 195
+  }
+
+  DFSInOrder() {
+    // TODO DFS with InOrder (lec.197)
+  }
+  DFSPreOrder() {
+    // TODO DFS with PreOrder (lec.197)
+  }
+  DFSPostOrder() {
+    // TODO DFS with PostOrder (lec.197)
+  }
 }
 
 const tree = new BinarySearchTree();

@@ -19,6 +19,7 @@ console.log(fibonacciIterative(3));
 console.log(fibonacciIterative(6));
 console.log(fibonacciIterative(10));
 
+// TODO fix O(2^n) using cache
 function fibonacciRecursive(n) {
   // O(2^n)
   if (n < 2) return n;
